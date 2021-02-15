@@ -21,12 +21,11 @@ namespace Business.Concrete
 
         public IResult Add(Car car)
         {
-            if (car.DailyPrice > 0)
+            if (car.DailyPrice > 0 && car.Name.Length > 3)
             {
-                
+                _carDal.Add(car);
                 return new SuccessResult(Messages.CarAdded);
             }
-            _carDal.Add(car);
             return new ErrorResult(Messages.CarNameInvalid);
         }
 
@@ -43,45 +42,41 @@ namespace Business.Concrete
 
         public IDataResult<List<Car>> GetAllByBrandId(int id)
         {
-            return new SuccessDataResult<Car>(_carDal.Get(p => p.BrandId    == id));
+            return new SuccessDataResult<List<Car>>(_carDal.GetAll(b => b.BrandId == id));
         }
 
-        public List<Car> GetAllByColorId(int id)
+        public IDataResult<List<Car>> GetAllByColorId(int id)
         {
-            return _carDal.GetAll(b => b.ColorId == id);
+            return new SuccessDataResult<List<Car>> (_carDal.GetAll(b => b.ColorId == id));
         }
 
-        public List<Car> GetByDailyPrice(decimal min, decimal max)
+        public IDataResult<List<Car>> GetByDailyPrice(decimal min, decimal max)
         {
-            return _carDal.GetAll(b => b.DailyPrice == min && b.DailyPrice == max);
+            return new SuccessDataResult <List<Car>>(_carDal.GetAll(b => b.DailyPrice == min && b.DailyPrice == max));
         }
 
         public Car GetById(int id)
         {
-            return _carDal.Get(b => b.CarId == id);
+            return  _carDal.Get(b => b.Id == id);
         }
 
-        public List<CarDetailsDto> GetCarDetails()
+        public IDataResult<List<CarDetailsDto>> GetCarDetails()
         {
-            return _carDal.GetCarDetails();
-        }
+            return new SuccessDataResult<List<CarDetailsDto>> (_carDal.GetCarDetails());
+        }     
 
-        public List<Car> GetCarsByBrandId(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Car> GetCarsByColorId(int id)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public IResult Update(Car car)
         {
 
             _carDal.Update(car);
             return new SuccessResult(Messages.CarUpdated);
            
+        }
+
+        IDataResult<Car> ICarService.GetById(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }
