@@ -1,4 +1,6 @@
 ﻿using Business.Abstract;
+using Business.Constants;
+using Core.Utilities.Results;
 using DataAccess.Abstract;
 using Entities.Concrete;
 using System;
@@ -7,7 +9,7 @@ using System.Text;
 
 namespace Business.Concrete
 {
-    class ColorManager : IColorService
+   public  class ColorManager : IColorService
     {
         IColorDal _colorDal;
         public ColorManager(IColorDal colorsDal)
@@ -15,39 +17,39 @@ namespace Business.Concrete
             _colorDal = colorsDal;
         }
 
-        public void Add(Color color)
+        public IResult Add(Color color)
         {
             if (color.ColorName.Length > 3)
             {
-                _colorDal.Add(color);
-                Console.WriteLine("Renk basarıyla eklendi");
+
+                return new SuccessResult(Messages.ColorAdded);
             }
-            else
-            {
-                Console.WriteLine("Renk eklenemedi, renk ismi 3 karakterden az olamaz.");
-            }
+
+            _colorDal.Add(color);
+
+            return new ErrorResult(Messages.ColorNameInvalid);
         }
 
-        public void Delete(Color color)
+        public IResult Delete(Color color)
         {
             _colorDal.Delete(color);
-            Console.WriteLine("Renk silindi");
+            return new ErrorResult(Messages.ColorDeleted);
         }
 
-        public List<Color> GetAll()
+        public IDataResult<List<Color>> GetAll()
         {
-            return _colorDal.GetAll();
+            return new SuccessDataResult<List<Color>>(_colorDal.GetAll());
         }
 
-        public List<Color> GetCarsByColorsId(int id)
+        public IDataResult<List<Color>> GetCarsByColorsId(int id)
         {
-            return _colorDal.GetAll(c => c.ColorId == id);
+            return new SuccessDataResult<List<Color>>(_colorDal.GetAll(c => c.ColorId == id));
         }
 
-        public void Update(Color color)
+        public IResult Update(Color color)
         {
             _colorDal.Update(color);
-            Console.WriteLine("Renk bilgisini güncellediniz");
+            return new SuccessResult(Messages.ColorUpdated);
         }
     }
 }

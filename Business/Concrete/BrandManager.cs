@@ -19,11 +19,7 @@ namespace Business.Concrete
         }
         public IResult Add(Brand brand)
         {
-            if (brand.BrandName.Length > 2)
-            {
-                
-                return new ErrorResult(Messages.BrandNameInvalid);
-            }
+           
             _brandDal.Add(brand);
 
             return new SuccessResult(Messages.BrandAdded); 
@@ -43,7 +39,7 @@ namespace Business.Concrete
 
         public IDataResult<List<Brand>> GetCarsByBrandId(int id)
         {
-            return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(b => b.BrandId == id));
+            return new SuccessDataResult<List<Brand>>(_brandDal.GetAll(b => b.Id == id));
         }
 
         public IDataResult<List<Brand>> GetCarsByBrandId()
@@ -53,7 +49,7 @@ namespace Business.Concrete
 
         public IResult Update(Brand brand)
         {
-            if (brand.BrandName.Length >= 2)
+            if (brand.Name.Length >= 2)
             {
 
                 return new SuccessResult(Messages.BrandUpdated);

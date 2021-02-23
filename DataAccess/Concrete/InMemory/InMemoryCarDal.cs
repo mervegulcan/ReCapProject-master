@@ -16,11 +16,11 @@ namespace DataAccess.Concrete.InMemory
         {
             _cars = new List<Car>
             {
-                new Car { CarId = 1, BrandId = 1, ColorId=100, ModelYear = 2017, DailyPrice = 220000, Description = "Audi A3" },
-                new Car { CarId = 2, BrandId = 1, ColorId=101, ModelYear = 2016, DailyPrice = 450000, Description = "Mercedes C Serisi" },
-                new Car { CarId = 3, BrandId = 2, ColorId=103, ModelYear = 2015, DailyPrice = 280000, Description = "Ford Focus" },
-                new Car { CarId = 4, BrandId = 3, ColorId=100, ModelYear = 2020, DailyPrice = 150000, Description = "Opel Astra" },
-                new Car { CarId = 5, BrandId = 3, ColorId=104, ModelYear = 2019, DailyPrice = 380000, Description = "Opel Insignia"}
+                new Car { Id = 1, BrandId = 1, ColorId=100, ModelYear = 2017, DailyPrice = 220000, Description = "Audi A3" },
+                new Car { Id = 2, BrandId = 1, ColorId=101, ModelYear = 2016, DailyPrice = 450000, Description = "Mercedes C Serisi" },
+                new Car { Id = 3, BrandId = 2, ColorId=103, ModelYear = 2015, DailyPrice = 280000, Description = "Ford Focus" },
+                new Car { Id = 4, BrandId = 3, ColorId=100, ModelYear = 2020, DailyPrice = 150000, Description = "Opel Astra" },
+                new Car { Id = 5, BrandId = 3, ColorId=104, ModelYear = 2019, DailyPrice = 380000, Description = "Opel Insignia"}
             };
         }
 
@@ -31,7 +31,7 @@ namespace DataAccess.Concrete.InMemory
 
         public void Delete(Car car)
         {
-            Car carToDelete = _cars.SingleOrDefault(p => p.CarId == car.CarId);
+            Car carToDelete = _cars.SingleOrDefault(p => p.Id == car.Id);
             _cars.Remove(carToDelete);
         }
 
@@ -49,13 +49,13 @@ namespace DataAccess.Concrete.InMemory
 
         public List<Car> GetById(int Id)
         {
-            return _cars.Where(p => p.CarId == Id).ToList();
+            return _cars.Where(p => p.Id == Id).ToList();
         }
 
         public void Update(Car car)
         {
-            Car carToUpdate = _cars.SingleOrDefault(p => p.CarId == car.CarId);
-            carToUpdate.CarId = car.CarId;
+            Car carToUpdate = _cars.SingleOrDefault(p => p.Id == car.Id);
+            carToUpdate.Id = car.Id;
             carToUpdate.BrandId = car.BrandId;
         }
         public List<Car> GetCarsByColorId(int colorId)
@@ -73,6 +73,11 @@ namespace DataAccess.Concrete.InMemory
         }
 
         public List<CarDetailsDto> GetCarDetails()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CarDetailsDto> GetCarDetails(Expression<Func<Car, bool>> filter = null)
         {
             throw new NotImplementedException();
         }

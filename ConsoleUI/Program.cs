@@ -6,34 +6,52 @@ using System;
 
 namespace ConsoleUI
 {
-    class Program
+    public class Program
     {
         static void Main(string[] args)
         {
-            
-            BrandManager brandManager = new BrandManager(new EfBrandDal());
-            brandManager.Add(new Brand { BrandName = "AUDI" });
-            var brands = brandManager.GetAll();
-            foreach (var item in brands)
-            {
-                Console.WriteLine("MARKA :{0} ",item.BrandName);
-            }
 
-            //ColorManager colorManager = new Business.Concrete.ColorManager(new EfColorDal());
-            //colorManager.Add(new Color { ColorName = "BEYAZ" });
-            //var colors = colorManager.GetAll();
-            //foreach (var item in colors)
+            CarDetails();
+            // RentalDetailsDetails();
+
+            //BrandManager bman = new BrandManager(new EfBrandDal());
+            //var result = bman.GetAll();
+            //foreach (var item in result.Data)
             //{
-            //    Console.WriteLine("RENK :{0} ", item.ColorName);
+            //    Console.WriteLine(item.Name);
             //}
 
-            CarManager carManager = new Business.Concrete.CarManager(new EfCarDal());
-            carManager.Add(new Car{ ColorId = 1, BrandId = 2, ModelYear = 2021, DailyPrice = 300, Description = "Otomatik sarj" });
-            var carDetails = carManager.GetCarDetails();
-            foreach (var item in carDetails)
+
+        }
+        private static void RentalDetailsDetails()
+        {
+            RentalManager rentalManager = new RentalManager(new EfRentalDal());
+
+            foreach (var ren in rentalManager.GetRentalDetailsDto(1).Data)
             {
-                Console.WriteLine("Model :{0} Araç Rengi :{ 1}  Günlük Fiyatı :{ 2}  ",item.BrandName, item.ColorName, item.DailyPrice, item.ColorName);
+
+                Console.WriteLine(ren.CarName + " rentdate : " + string.Format("{0:dd.MM.yyyy}", ren.RentDate));
             }
         }
+
+            private static void CarDetails()
+        {
+            CarManager carManager = new CarManager(new EfCarDal());
+            
+            var carDetails = carManager.GetCarDetails();
+            if (carDetails.Success == true)
+            {
+                foreach (var car in carDetails.Data)
+                {
+                    Console.WriteLine(car.Id + "/"+ car.Name + "/ Marka :" + car.BrandName);
+                }
+            }
+            else
+            {
+                Console.WriteLine("Hata :"+carDetails.Message);
+            }
+        }
+
+        
     }
 }
